@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Товари{% endblock %}
+
+{% block body %}
+    <h1>Товари</h1>
+
+    {% for message in app.flashes('success') %}
+        <p style="color: green">{{ message }}</p>
+    {% endfor %}
+
+    <a href="{{ path('product_new') }}">Додати товар</a>
+
+    <table border="1" cellpadding="6">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва</th>
+                <th>Ціна</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }} грн</td>
+                <td>
+                    <a href="{{ path('product_show', {id: product.id}) }}">Переглянути</a>
+                    <a href="{{ path('product_edit', {id: product.id}) }}">Редагувати</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Записів немає</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
