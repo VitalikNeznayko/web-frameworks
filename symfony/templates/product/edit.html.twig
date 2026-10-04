@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редагування товару{% endblock %}
+
+{% block body %}
+    <h1>Редагування: {{ product.name }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Оновити</button>
+    {{ form_end(form) }}
+
+    {{ include('product/_delete_form.html.twig') }}
+
+    <a href="{{ path('product_index') }}">Назад до списку</a>
+{% endblock %}
