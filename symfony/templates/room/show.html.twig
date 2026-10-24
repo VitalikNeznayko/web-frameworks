@@ -52,8 +52,10 @@
 
         <div class="actions">
             <a class="btn btn-secondary" href="{{ path('room_index') }}">До списку</a>
-            <a class="btn" href="{{ path('room_edit', {'id': room.id}) }}">Редагувати</a>
-            <a class="btn" href="{{ path('bed_new') }}">Додати ліжко</a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <a class="btn" href="{{ path('room_edit', {'id': room.id}) }}">Редагувати</a>
+                <a class="btn" href="{{ path('bed_new') }}">Додати ліжко</a>
+            {% endif %}
             {{ include('room/_delete_form.html.twig') }}
         </div>
     </div>

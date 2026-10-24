@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ user.fullName }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>{{ user.fullName }}</h1>
+        <dl class="details">
+            <dt>Повне ім'я</dt><dd>{{ user.fullName }}</dd>
+            <dt>Email</dt><dd>{{ user.email }}</dd>
+            <dt>Роль</dt><dd><span class="badge badge-role badge-{{ user.role|lower }}">{{ user.roleLabel }}</span></dd>
+            <dt>Створено</dt><dd>{{ user.createdAt|date('d.m.Y H:i') }}</dd>
+        </dl>
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('user_index') }}">До списку</a>
+            <a class="btn" href="{{ path('user_edit', {'id': user.id}) }}">Редагувати</a>
+            {{ include('user/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

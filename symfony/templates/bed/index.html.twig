@@ -29,7 +29,7 @@
                     <td>{{ bed.bookings|length }}</td>
                     <td>
                         <a href="{{ path('bed_show', {'id': bed.id}) }}">переглянути</a>
-                        | <a href="{{ path('bed_edit', {'id': bed.id}) }}">редагувати</a>
+                        {% if is_granted('ROLE_MANAGER') %}| <a href="{{ path('bed_edit', {'id': bed.id}) }}">редагувати</a>{% endif %}
                     </td>
                 </tr>
             {% else %}
@@ -41,7 +41,9 @@
         </table>
         {% include '_pagination.html.twig' %}
         <div class="actions">
-            <a class="btn" href="{{ path('bed_new') }}">Додати ліжко</a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <a class="btn" href="{{ path('bed_new') }}">Додати ліжко</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

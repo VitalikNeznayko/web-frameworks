@@ -1,0 +1,7 @@
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <div class="actions">
+        <button class="btn">{{ button_label|default('Зберегти') }}</button>
+        <a class="btn btn-secondary" href="{{ path('user_index') }}">Скасувати</a>
+    </div>
+{{ form_end(form) }}

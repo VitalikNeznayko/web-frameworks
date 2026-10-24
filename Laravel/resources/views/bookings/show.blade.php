@@ -6,8 +6,12 @@
     <div class="toolbar">
         <h1>Бронювання #{{ $booking->id }}</h1>
         <div class="actions">
-            <a href="{{ route('bookings.edit', $booking) }}" class="btn">Редагувати</a>
-            @include('partials.delete', ['action' => route('bookings.destroy', $booking), 'confirm' => 'Видалити бронювання разом із платежами?', 'size' => ''])
+            @can('update', $booking)
+                <a href="{{ route('bookings.edit', $booking) }}" class="btn">Редагувати</a>
+            @endcan
+            @can('delete', $booking)
+                @include('partials.delete', ['action' => route('bookings.destroy', $booking), 'confirm' => 'Видалити бронювання разом із платежами?', 'size' => ''])
+            @endcan
             <a href="{{ route('bookings.index') }}" class="btn btn-secondary">До списку</a>
         </div>
     </div>
@@ -37,7 +41,9 @@
 
     <div class="toolbar">
         <h2>Платежі ({{ $booking->payments->count() }})</h2>
-        <a href="{{ route('payments.create') }}" class="btn btn-secondary btn-sm">Додати платіж</a>
+        @can('create', App\Models\Payment::class)
+            <a href="{{ route('payments.create') }}" class="btn btn-secondary btn-sm">Додати платіж</a>
+        @endcan
     </div>
     <div class="card">
         @if ($booking->payments->isEmpty())

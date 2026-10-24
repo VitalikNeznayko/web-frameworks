@@ -9,10 +9,16 @@ use App\Models\Booking;
 use App\Models\Guest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\View\View;
 
-class BookingController extends Controller
+class BookingController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return self::resourceAuthorization(Booking::class, 'booking');
+    }
+
     public function index(Request $request): View
     {
         $filter = new BookingFilter($request->query());

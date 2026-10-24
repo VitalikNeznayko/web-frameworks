@@ -5,7 +5,9 @@
 @section('content')
     <div class="toolbar">
         <h1>Ліжка</h1>
-        <a href="{{ route('beds.create') }}" class="btn">Додати ліжко</a>
+        @can('create', App\Models\Bed::class)
+            <a href="{{ route('beds.create') }}" class="btn">Додати ліжко</a>
+        @endcan
     </div>
 
     @include('partials.filters', ['filter' => $filter, 'action' => route('beds.index')])
@@ -41,8 +43,12 @@
                         <td>{{ $bed->bookings_count }}</td>
                         <td class="actions">
                             <a href="{{ route('beds.show', $bed) }}" class="btn btn-secondary btn-sm">Переглянути</a>
-                            <a href="{{ route('beds.edit', $bed) }}" class="btn btn-secondary btn-sm">Редагувати</a>
-                            @include('partials.delete', ['action' => route('beds.destroy', $bed), 'confirm' => 'Видалити ліжко?'])
+                            @can('update', $bed)
+                                <a href="{{ route('beds.edit', $bed) }}" class="btn btn-secondary btn-sm">Редагувати</a>
+                            @endcan
+                            @can('delete', $bed)
+                                @include('partials.delete', ['action' => route('beds.destroy', $bed), 'confirm' => 'Видалити ліжко?'])
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

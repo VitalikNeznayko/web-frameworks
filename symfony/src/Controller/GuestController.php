@@ -13,8 +13,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/guests')]
+#[IsGranted('ROLE_MANAGER')]
 final class GuestController extends AbstractController
 {
     #[Route(name: 'guest_index', methods: ['GET'])]

@@ -5,7 +5,9 @@
 @section('content')
     <div class="toolbar">
         <h1>Зручності</h1>
-        <a href="{{ route('amenities.create') }}" class="btn">Додати зручність</a>
+        @can('create', App\Models\Amenity::class)
+            <a href="{{ route('amenities.create') }}" class="btn">Додати зручність</a>
+        @endcan
     </div>
 
     @include('partials.filters', ['filter' => $filter, 'action' => route('amenities.index')])
@@ -31,8 +33,12 @@
                         <td>{{ $amenity->rooms_count }}</td>
                         <td class="actions">
                             <a href="{{ route('amenities.show', $amenity) }}" class="btn btn-secondary btn-sm">Переглянути</a>
-                            <a href="{{ route('amenities.edit', $amenity) }}" class="btn btn-secondary btn-sm">Редагувати</a>
-                            @include('partials.delete', ['action' => route('amenities.destroy', $amenity), 'confirm' => 'Видалити зручність?'])
+                            @can('update', $amenity)
+                                <a href="{{ route('amenities.edit', $amenity) }}" class="btn btn-secondary btn-sm">Редагувати</a>
+                            @endcan
+                            @can('delete', $amenity)
+                                @include('partials.delete', ['action' => route('amenities.destroy', $amenity), 'confirm' => 'Видалити зручність?'])
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

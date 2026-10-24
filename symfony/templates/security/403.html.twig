@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Доступ заборонено{% endblock %}
+
+{% block body %}
+    <div class="card error-page">
+        <p class="error-code">403</p>
+        <h1>Доступ заборонено</h1>
+        <p class="muted">У вас недостатньо прав для перегляду цієї сторінки або виконання цієї дії.</p>
+        {% if app.user %}
+            <p>Ваша роль: <span class="badge badge-role badge-{{ app.user.role|lower }}">{{ app.user.roleLabel }}</span></p>
+        {% endif %}
+        <div class="actions" style="justify-content: center;">
+            <a class="btn" href="{{ path('home') }}">На головну</a>
+            <a class="btn btn-secondary" href="javascript:history.back()">Назад</a>
+        </div>
+    </div>
+{% endblock %}

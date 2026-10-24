@@ -8,10 +8,16 @@ use App\Models\Bed;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\View\View;
 
-class BedController extends Controller
+class BedController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return self::resourceAuthorization(Bed::class, 'bed');
+    }
+
     public function index(Request $request): View
     {
         $filter = new BedFilter($request->query());

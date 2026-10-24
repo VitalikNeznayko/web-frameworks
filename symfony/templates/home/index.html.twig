@@ -6,6 +6,7 @@
     <div class="card">
         <h1>Система керування хостелом</h1>
         <p class="muted">Облік кімнат, ліжок, зручностей, гостей, бронювань та платежів.</p>
+        <p>Ви увійшли як <strong>{{ app.user.fullName }}</strong> <span class="badge badge-role badge-{{ app.user.role|lower }}">{{ app.user.roleLabel }}</span></p>
     </div>
 
     <div class="grid">
@@ -15,7 +16,9 @@
                 <div class="count">{{ section.count }}</div>
                 <div class="actions">
                     <a class="btn btn-secondary" href="{{ path(section.route) }}">Переглянути</a>
-                    <a class="btn" href="{{ path(section.new) }}">Додати</a>
+                    {% if section.new %}
+                        <a class="btn" href="{{ path(section.new) }}">Додати</a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
