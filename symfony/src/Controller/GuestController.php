@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Guest;
+use App\Form\Filter\GuestFilterType;
 use App\Form\GuestType;
+use App\Pagination\Paginator;
 use App\Repository\GuestRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,10 +18,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class GuestController extends AbstractController
 {
     #[Route(name: 'guest_index', methods: ['GET'])]
-    public function index(GuestRepository $guestRepository): Response
+    public function index(Request $request, GuestRepository $guestRepository, Paginator $paginator): Response
     {
+        $filterForm = $this->createForm(GuestFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $pagination = $paginator->paginate(
+            $guestRepository->createFilteredQueryBuilder($filterForm->getData() ?? []),
+            $request,
+            false,
+        );
+
         return $this->render('guest/index.html.twig', [
-            'guests' => $guestRepository->findBy([], ['lastName' => 'ASC', 'firstName' => 'ASC']),
+            'guests' => $pagination->getItems(),
+            'pagination' => $pagination,
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

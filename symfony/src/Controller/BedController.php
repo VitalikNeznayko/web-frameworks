@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Bed;
+use App\Form\Filter\BedFilterType;
 use App\Form\BedType;
+use App\Pagination\Paginator;
 use App\Repository\BedRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,18 +18,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BedController extends AbstractController
 {
     #[Route(name: 'bed_index', methods: ['GET'])]
-    public function index(BedRepository $bedRepository): Response
+    public function index(Request $request, BedRepository $bedRepository, Paginator $paginator): Response
     {
-        $beds = $bedRepository->createQueryBuilder('b')
-            ->join('b.room', 'r')
-            ->addSelect('r')
-            ->orderBy('r.number', 'ASC')
-            ->addOrderBy('b.label', 'ASC')
-            ->getQuery()
-            ->getResult();
+        $filterForm = $this->createForm(BedFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $pagination = $paginator->paginate(
+            $bedRepository->createFilteredQueryBuilder($filterForm->getData() ?? []),
+            $request,
+            false,
+        );
 
         return $this->render('bed/index.html.twig', [
-            'beds' => $beds,
+            'beds' => $pagination->getItems(),
+            'pagination' => $pagination,
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

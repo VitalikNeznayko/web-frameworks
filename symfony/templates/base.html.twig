@@ -51,6 +51,24 @@
                 dl.details { display: grid; grid-template-columns: 200px 1fr; gap: 6px 16px; margin: 0; }
                 dl.details dt { font-weight: 600; color: #4a5866; }
                 dl.details dd { margin: 0; }
+                .filter-form { margin-bottom: 16px; padding: 14px 16px; background: #f7f9fb; border: 1px solid #e3e7ec; border-radius: 6px; }
+                .filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px 14px; }
+                .filter-form .filter-grid > div { margin-bottom: 0; }
+                .filter-field label { font-size: 13px; margin-bottom: 2px; color: #4a5866; }
+                .filter-field input, .filter-field select { padding: 5px 7px; font-size: 14px; }
+                .filter-field ul { margin: 4px 0 0; padding-left: 16px; font-size: 12px; }
+                .filter-actions { display: flex; gap: 8px; margin-top: 12px; }
+                .pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
+                .pagination-info { color: #4a5866; }
+                .pagination-pages { display: flex; flex-wrap: wrap; gap: 4px; }
+                .page-link { padding: 5px 10px; border: 1px solid #c5ccd5; border-radius: 4px; background: #fff; font-size: 14px; }
+                .page-link:hover { text-decoration: none; background: #eef2f6; }
+                .page-link.current { background: #1f5fbf; color: #fff; border-color: #1f5fbf; }
+                .page-link.disabled { color: #aab4bf; background: #fff; }
+                .page-gap { padding: 5px 4px; color: #7a8794; }
+                .pagination-size { display: flex; align-items: center; gap: 6px; margin: 0; }
+                .pagination-size label { margin: 0; font-weight: normal; }
+                .pagination-size select { width: auto; padding: 4px 6px; }
             </style>
         {% endblock %}
 

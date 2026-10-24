@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Form\Filter\BookingFilterType;
 use App\Form\BookingType;
+use App\Pagination\Paginator;
 use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,19 +17,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class BookingController extends AbstractController
 {
     #[Route(name: 'booking_index', methods: ['GET'])]
-    public function index(BookingRepository $bookingRepository): Response
+    public function index(Request $request, BookingRepository $bookingRepository, Paginator $paginator): Response
     {
-        $bookings = $bookingRepository->createQueryBuilder('bk')
-            ->join('bk.guest', 'g')
-            ->join('bk.bed', 'b')
-            ->join('b.room', 'r')
-            ->addSelect('g', 'b', 'r')
-            ->orderBy('bk.checkIn', 'DESC')
-            ->getQuery()
-            ->getResult();
+        $filterForm = $this->createForm(BookingFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $pagination = $paginator->paginate(
+            $bookingRepository->createFilteredQueryBuilder($filterForm->getData() ?? []),
+            $request,
+            false,
+        );
 
         return $this->render('booking/index.html.twig', [
-            'bookings' => $bookings,
+            'bookings' => $pagination->getItems(),
+            'pagination' => $pagination,
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

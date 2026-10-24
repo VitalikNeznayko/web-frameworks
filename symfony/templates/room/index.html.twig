@@ -5,9 +5,11 @@
 {% block body %}
     <div class="card">
         <h1>Кімнати</h1>
+        {% include '_filter_form.html.twig' %}
         <table>
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Номер</th>
                     <th>Тип</th>
                     <th>Поверх</th>
@@ -20,6 +22,7 @@
             <tbody>
             {% for room in rooms %}
                 <tr>
+                    <td>{{ room.id }}</td>
                     <td>{{ room.number }}</td>
                     <td>{{ room.typeLabel }}</td>
                     <td>{{ room.floor }}</td>
@@ -33,11 +36,12 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="7" class="muted">Записів не знайдено</td>
+                    <td colspan="8" class="muted">Записів не знайдено</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% include '_pagination.html.twig' %}
         <div class="actions">
             <a class="btn" href="{{ path('room_new') }}">Додати кімнату</a>
         </div>
