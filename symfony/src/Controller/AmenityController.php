@@ -12,8 +12,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/amenities')]
+#[IsGranted('ROLE_CLIENT')]
 final class AmenityController extends AbstractController
 {
     #[Route(name: 'amenity_index', methods: ['GET'])]
@@ -36,6 +38,7 @@ final class AmenityController extends AbstractController
     }
 
     #[Route('/new', name: 'amenity_new', methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_MANAGER')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $amenity = new Amenity();
@@ -66,6 +69,7 @@ final class AmenityController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'amenity_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('ROLE_MANAGER')]
     public function edit(Request $request, Amenity $amenity, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(AmenityType::class, $amenity);
@@ -86,6 +90,7 @@ final class AmenityController extends AbstractController
     }
 
     #[Route('/{id}', name: 'amenity_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Amenity $amenity, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$amenity->getId(), $request->getPayload()->getString('_token'))) {

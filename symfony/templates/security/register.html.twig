@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block body %}
+    <div class="card auth-card">
+        <h1>Реєстрація</h1>
+
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <div class="actions">
+                <button type="submit" class="btn">Зареєструватися</button>
+                <a href="{{ path('app_login') }}">Вже маєте обліковий запис? Увійти</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

@@ -12,39 +12,43 @@
             <dt>Активне</dt><dd>{{ bed.active ? 'Так' : 'Ні' }}</dd>
         </dl>
 
-        <h2>Бронювання</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Гість</th>
-                    <th>Заїзд</th>
-                    <th>Виїзд</th>
-                    <th>Статус</th>
-                    <th>Вартість</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for booking in bed.bookings %}
-                <tr>
-                    <td><a href="{{ path('booking_show', {'id': booking.id}) }}">#{{ booking.id }}</a></td>
-                    <td><a href="{{ path('guest_show', {'id': booking.guest.id}) }}">{{ booking.guest }}</a></td>
-                    <td>{{ booking.checkIn|date('d.m.Y') }}</td>
-                    <td>{{ booking.checkOut|date('d.m.Y') }}</td>
-                    <td><span class="badge">{{ booking.statusLabel }}</span></td>
-                    <td>{{ booking.totalPrice|number_format(2, '.', ' ') }} грн</td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="6" class="muted">Бронювань немає</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+        {% if is_granted('ROLE_MANAGER') %}
+            <h2>Бронювання</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Гість</th>
+                        <th>Заїзд</th>
+                        <th>Виїзд</th>
+                        <th>Статус</th>
+                        <th>Вартість</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for booking in bed.bookings %}
+                    <tr>
+                        <td><a href="{{ path('booking_show', {'id': booking.id}) }}">#{{ booking.id }}</a></td>
+                        <td><a href="{{ path('guest_show', {'id': booking.guest.id}) }}">{{ booking.guest }}</a></td>
+                        <td>{{ booking.checkIn|date('d.m.Y') }}</td>
+                        <td>{{ booking.checkOut|date('d.m.Y') }}</td>
+                        <td><span class="badge">{{ booking.statusLabel }}</span></td>
+                        <td>{{ booking.totalPrice|number_format(2, '.', ' ') }} грн</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6" class="muted">Бронювань немає</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
 
         <div class="actions">
             <a class="btn btn-secondary" href="{{ path('bed_index') }}">До списку</a>
-            <a class="btn" href="{{ path('bed_edit', {'id': bed.id}) }}">Редагувати</a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <a class="btn" href="{{ path('bed_edit', {'id': bed.id}) }}">Редагувати</a>
+            {% endif %}
             {{ include('bed/_delete_form.html.twig') }}
         </div>
     </div>

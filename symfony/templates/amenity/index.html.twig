@@ -25,7 +25,7 @@
                     <td>{{ amenity.rooms|length }}</td>
                     <td>
                         <a href="{{ path('amenity_show', {'id': amenity.id}) }}">переглянути</a>
-                        | <a href="{{ path('amenity_edit', {'id': amenity.id}) }}">редагувати</a>
+                        {% if is_granted('ROLE_MANAGER') %}| <a href="{{ path('amenity_edit', {'id': amenity.id}) }}">редагувати</a>{% endif %}
                     </td>
                 </tr>
             {% else %}
@@ -37,7 +37,9 @@
         </table>
         {% include '_pagination.html.twig' %}
         <div class="actions">
-            <a class="btn" href="{{ path('amenity_new') }}">Додати зручність</a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <a class="btn" href="{{ path('amenity_new') }}">Додати зручність</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

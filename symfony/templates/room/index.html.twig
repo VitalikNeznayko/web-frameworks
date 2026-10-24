@@ -31,7 +31,7 @@
                     <td>{{ room.amenities|map(a => a.name)|join(', ') }}</td>
                     <td>
                         <a href="{{ path('room_show', {'id': room.id}) }}">переглянути</a>
-                        | <a href="{{ path('room_edit', {'id': room.id}) }}">редагувати</a>
+                        {% if is_granted('ROLE_MANAGER') %}| <a href="{{ path('room_edit', {'id': room.id}) }}">редагувати</a>{% endif %}
                     </td>
                 </tr>
             {% else %}
@@ -43,7 +43,9 @@
         </table>
         {% include '_pagination.html.twig' %}
         <div class="actions">
-            <a class="btn" href="{{ path('room_new') }}">Додати кімнату</a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <a class="btn" href="{{ path('room_new') }}">Додати кімнату</a>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

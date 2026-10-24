@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новий користувач{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Новий користувач</h1>
+
+        {{ include('user/_form.html.twig', {'button_label': 'Створити'}) }}
+    </div>
+{% endblock %}

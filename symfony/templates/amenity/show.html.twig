@@ -23,7 +23,9 @@
 
         <div class="actions">
             <a class="btn btn-secondary" href="{{ path('amenity_index') }}">До списку</a>
-            <a class="btn" href="{{ path('amenity_edit', {'id': amenity.id}) }}">Редагувати</a>
+            {% if is_granted('ROLE_MANAGER') %}
+                <a class="btn" href="{{ path('amenity_edit', {'id': amenity.id}) }}">Редагувати</a>
+            {% endif %}
             {{ include('amenity/_delete_form.html.twig') }}
         </div>
     </div>
