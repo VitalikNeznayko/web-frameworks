@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Головна{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Система керування хостелом</h1>
+        <p class="muted">Облік кімнат, ліжок, зручностей, гостей, бронювань та платежів.</p>
+    </div>
+
+    <div class="grid">
+        {% for section in sections %}
+            <div class="card">
+                <h2 style="margin-top: 0;"><a href="{{ path(section.route) }}">{{ section.title }}</a></h2>
+                <div class="count">{{ section.count }}</div>
+                <div class="actions">
+                    <a class="btn btn-secondary" href="{{ path(section.route) }}">Переглянути</a>
+                    <a class="btn" href="{{ path(section.new) }}">Додати</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

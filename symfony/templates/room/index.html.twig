@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Кімнати{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Кімнати</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Номер</th>
+                    <th>Тип</th>
+                    <th>Поверх</th>
+                    <th>Ціна за ніч</th>
+                    <th>Ліжок</th>
+                    <th>Зручності</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for room in rooms %}
+                <tr>
+                    <td>{{ room.number }}</td>
+                    <td>{{ room.typeLabel }}</td>
+                    <td>{{ room.floor }}</td>
+                    <td>{{ room.pricePerNight|number_format(2, '.', ' ') }} грн</td>
+                    <td>{{ room.beds|length }}</td>
+                    <td>{{ room.amenities|map(a => a.name)|join(', ') }}</td>
+                    <td>
+                        <a href="{{ path('room_show', {'id': room.id}) }}">переглянути</a>
+                        | <a href="{{ path('room_edit', {'id': room.id}) }}">редагувати</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="muted">Записів не знайдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ path('room_new') }}">Додати кімнату</a>
+        </div>
+    </div>
+{% endblock %}

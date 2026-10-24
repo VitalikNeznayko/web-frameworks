@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="uk">
     <head>
         <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Хостел{% endblock %} — Система керування хостелом</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🛏️</text></svg>">
         {% block stylesheets %}
+            <style>
+                * { box-sizing: border-box; }
+                body { margin: 0; font-family: "Segoe UI", Arial, sans-serif; background: #f4f6f9; color: #222; }
+                a { color: #1f5fbf; text-decoration: none; }
+                a:hover { text-decoration: underline; }
+                .navbar { background: #243447; padding: 0 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+                .navbar .brand { color: #fff; font-weight: 600; font-size: 18px; margin-right: 24px; padding: 14px 0; }
+                .navbar a.nav-link { color: #cfd8e3; padding: 16px 12px; display: inline-block; }
+                .navbar a.nav-link:hover, .navbar a.nav-link.active { color: #fff; background: #31465d; text-decoration: none; }
+                .container { max-width: 1100px; margin: 24px auto; padding: 0 16px; }
+                .card { background: #fff; border-radius: 8px; padding: 20px 24px; box-shadow: 0 1px 3px rgba(0,0,0,.08); margin-bottom: 20px; }
+                h1 { margin-top: 0; font-size: 26px; }
+                h2 { font-size: 20px; margin-top: 24px; }
+                table { width: 100%; border-collapse: collapse; background: #fff; }
+                th, td { padding: 8px 10px; border-bottom: 1px solid #e3e7ec; text-align: left; vertical-align: top; }
+                th { background: #eef2f6; font-weight: 600; }
+                tr:hover td { background: #fafbfc; }
+                .flash { padding: 10px 14px; border-radius: 6px; margin-bottom: 12px; }
+                .flash-success { background: #e3f6e8; color: #1d6b34; border: 1px solid #b7e4c4; }
+                .flash-error { background: #fdeaea; color: #9b1c1c; border: 1px solid #f3bcbc; }
+                .btn { display: inline-block; padding: 7px 14px; border-radius: 5px; border: 1px solid transparent; background: #1f5fbf; color: #fff; cursor: pointer; font-size: 14px; }
+                .btn:hover { background: #184c99; text-decoration: none; }
+                .btn-secondary { background: #6c7a89; }
+                .btn-secondary:hover { background: #56636f; }
+                .btn-danger { background: #c0392b; }
+                .btn-danger:hover { background: #992d22; }
+                .actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+                .actions form { margin: 0; }
+                form .form-row, form > div > div { margin-bottom: 14px; }
+                label { display: block; font-weight: 600; margin-bottom: 4px; }
+                input[type=text], input[type=email], input[type=tel], input[type=number], input[type=date], input[type=datetime-local], select, textarea {
+                    width: 100%; max-width: 480px; padding: 7px 9px; border: 1px solid #c5ccd5; border-radius: 5px; font: inherit; background: #fff;
+                }
+                textarea { min-height: 90px; }
+                input[type=checkbox] + label, input[type=checkbox] ~ label { display: inline; font-weight: normal; margin-left: 4px; }
+                ul { padding-left: 20px; }
+                form ul li, .form-errors li { color: #9b1c1c; }
+                .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; background: #e3e7ec; }
+                .muted { color: #7a8794; }
+                .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+                .grid .card { margin: 0; }
+                .count { font-size: 32px; font-weight: 700; color: #243447; }
+                dl.details { display: grid; grid-template-columns: 200px 1fr; gap: 6px 16px; margin: 0; }
+                dl.details dt { font-weight: 600; color: #4a5866; }
+                dl.details dd { margin: 0; }
+            </style>
         {% endblock %}
 
         {% block javascripts %}
@@ -19,6 +66,23 @@
         {% endif %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% set current_route = app.request.attributes.get('_route') ?? '' %}
+        <nav class="navbar">
+            <a class="brand" href="{{ path('home') }}">🛏️ Хостел</a>
+            <a class="nav-link {{ current_route starts with 'room_' ? 'active' }}" href="{{ path('room_index') }}">Кімнати</a>
+            <a class="nav-link {{ current_route starts with 'amenity_' ? 'active' }}" href="{{ path('amenity_index') }}">Зручності</a>
+            <a class="nav-link {{ current_route starts with 'bed_' ? 'active' }}" href="{{ path('bed_index') }}">Ліжка</a>
+            <a class="nav-link {{ current_route starts with 'guest_' ? 'active' }}" href="{{ path('guest_index') }}">Гості</a>
+            <a class="nav-link {{ current_route starts with 'booking_' ? 'active' }}" href="{{ path('booking_index') }}">Бронювання</a>
+            <a class="nav-link {{ current_route starts with 'payment_' ? 'active' }}" href="{{ path('payment_index') }}">Платежі</a>
+        </nav>
+        <main class="container">
+            {% for type in ['success', 'error'] %}
+                {% for message in app.flashes(type) %}
+                    <div class="flash flash-{{ type }}">{{ message }}</div>
+                {% endfor %}
+            {% endfor %}
+            {% block body %}{% endblock %}
+        </main>
     </body>
 </html>

@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редагування кімнати{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Редагування кімнати</h1>
+
+        {{ include('room/_form.html.twig', {'button_label': 'Оновити'}) }}
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('room_show', {'id': room.id}) }}">Переглянути</a>
+            {{ include('room/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ room }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>{{ room }}</h1>
+        <dl class="details">
+            <dt>Номер</dt><dd>{{ room.number }}</dd>
+            <dt>Тип</dt><dd>{{ room.typeLabel }}</dd>
+            <dt>Поверх</dt><dd>{{ room.floor }}</dd>
+            <dt>Ціна за ніч</dt><dd>{{ room.pricePerNight|number_format(2, '.', ' ') }} грн</dd>
+            <dt>Опис</dt><dd>{{ room.description ?: '—' }}</dd>
+        </dl>
+
+        <h2>Зручності</h2>
+        {% if room.amenities is empty %}
+            <p class="muted">Зручності не вказано</p>
+        {% else %}
+            <ul>
+                {% for amenity in room.amenities %}
+                    <li><a href="{{ path('amenity_show', {'id': amenity.id}) }}">{{ amenity.name }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <h2>Ліжка</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Позначка</th>
+                    <th>Тип</th>
+                    <th>Активне</th>
+                    <th>Бронювань</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for bed in room.beds %}
+                <tr>
+                    <td><a href="{{ path('bed_show', {'id': bed.id}) }}">{{ bed.label }}</a></td>
+                    <td>{{ bed.bedTypeLabel }}</td>
+                    <td>{{ bed.active ? 'Так' : 'Ні' }}</td>
+                    <td>{{ bed.bookings|length }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="muted">Ліжок немає</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('room_index') }}">До списку</a>
+            <a class="btn" href="{{ path('room_edit', {'id': room.id}) }}">Редагувати</a>
+            <a class="btn" href="{{ path('bed_new') }}">Додати ліжко</a>
+            {{ include('room/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

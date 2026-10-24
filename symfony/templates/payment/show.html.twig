@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Платіж #{{ payment.id }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Платіж #{{ payment.id }}</h1>
+        <dl class="details">
+            <dt>Бронювання</dt><dd><a href="{{ path('booking_show', {'id': payment.booking.id}) }}">{{ payment.booking }}</a></dd>
+            <dt>Сума</dt><dd>{{ payment.amount|number_format(2, '.', ' ') }} грн</dd>
+            <dt>Спосіб оплати</dt><dd>{{ payment.methodLabel }}</dd>
+            <dt>Статус</dt><dd><span class="badge">{{ payment.statusLabel }}</span></dd>
+            <dt>Дата оплати</dt><dd>{{ payment.paidAt ? payment.paidAt|date('d.m.Y H:i') : '—' }}</dd>
+        </dl>
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('payment_index') }}">До списку</a>
+            <a class="btn" href="{{ path('payment_edit', {'id': payment.id}) }}">Редагувати</a>
+            {{ include('payment/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

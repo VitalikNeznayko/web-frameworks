@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Нове ліжко{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Нове ліжко</h1>
+
+        {{ include('bed/_form.html.twig', {'button_label': 'Створити'}) }}
+    </div>
+{% endblock %}

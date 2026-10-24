@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Новий платіж{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Новий платіж</h1>
+
+        {{ include('payment/_form.html.twig', {'button_label': 'Створити'}) }}
+    </div>
+{% endblock %}

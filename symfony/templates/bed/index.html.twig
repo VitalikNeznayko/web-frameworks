@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ліжка{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Ліжка</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Кімната</th>
+                    <th>Позначка</th>
+                    <th>Тип</th>
+                    <th>Активне</th>
+                    <th>Бронювань</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for bed in beds %}
+                <tr>
+                    <td><a href="{{ path('room_show', {'id': bed.room.id}) }}">{{ bed.room }}</a></td>
+                    <td>{{ bed.label }}</td>
+                    <td>{{ bed.bedTypeLabel }}</td>
+                    <td>{{ bed.active ? 'Так' : 'Ні' }}</td>
+                    <td>{{ bed.bookings|length }}</td>
+                    <td>
+                        <a href="{{ path('bed_show', {'id': bed.id}) }}">переглянути</a>
+                        | <a href="{{ path('bed_edit', {'id': bed.id}) }}">редагувати</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="muted">Записів не знайдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ path('bed_new') }}">Додати ліжко</a>
+        </div>
+    </div>
+{% endblock %}

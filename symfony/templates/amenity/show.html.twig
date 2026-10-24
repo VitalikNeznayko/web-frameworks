@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ amenity.name }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>{{ amenity.name }}</h1>
+        <dl class="details">
+            <dt>Назва</dt><dd>{{ amenity.name }}</dd>
+            <dt>Опис</dt><dd>{{ amenity.description ?: '—' }}</dd>
+        </dl>
+
+        <h2>Кімнати з цією зручністю</h2>
+        {% if amenity.rooms is empty %}
+            <p class="muted">Немає кімнат</p>
+        {% else %}
+            <ul>
+                {% for room in amenity.rooms %}
+                    <li><a href="{{ path('room_show', {'id': room.id}) }}">{{ room }}</a> ({{ room.typeLabel }})</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('amenity_index') }}">До списку</a>
+            <a class="btn" href="{{ path('amenity_edit', {'id': amenity.id}) }}">Редагувати</a>
+            {{ include('amenity/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

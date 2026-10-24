@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Редагування ліжка{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Редагування ліжка</h1>
+
+        {{ include('bed/_form.html.twig', {'button_label': 'Оновити'}) }}
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('bed_show', {'id': bed.id}) }}">Переглянути</a>
+            {{ include('bed/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

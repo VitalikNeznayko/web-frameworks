@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Гості{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Гості</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ім'я</th>
+                    <th>Email</th>
+                    <th>Телефон</th>
+                    <th>Країна</th>
+                    <th>Бронювань</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for guest in guests %}
+                <tr>
+                    <td>{{ guest.fullName }}</td>
+                    <td>{{ guest.email }}</td>
+                    <td>{{ guest.phone }}</td>
+                    <td>{{ guest.country }}</td>
+                    <td>{{ guest.bookings|length }}</td>
+                    <td>
+                        <a href="{{ path('guest_show', {'id': guest.id}) }}">переглянути</a>
+                        | <a href="{{ path('guest_edit', {'id': guest.id}) }}">редагувати</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="muted">Записів не знайдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ path('guest_new') }}">Додати гостя</a>
+        </div>
+    </div>
+{% endblock %}

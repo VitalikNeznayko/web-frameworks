@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Платежі{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Платежі</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Бронювання</th>
+                    <th>Сума</th>
+                    <th>Спосіб</th>
+                    <th>Статус</th>
+                    <th>Дата оплати</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for payment in payments %}
+                <tr>
+                    <td>{{ payment.id }}</td>
+                    <td><a href="{{ path('booking_show', {'id': payment.booking.id}) }}">{{ payment.booking }}</a></td>
+                    <td>{{ payment.amount|number_format(2, '.', ' ') }} грн</td>
+                    <td>{{ payment.methodLabel }}</td>
+                    <td><span class="badge">{{ payment.statusLabel }}</span></td>
+                    <td>{{ payment.paidAt ? payment.paidAt|date('d.m.Y H:i') : '—' }}</td>
+                    <td>
+                        <a href="{{ path('payment_show', {'id': payment.id}) }}">переглянути</a>
+                        | <a href="{{ path('payment_edit', {'id': payment.id}) }}">редагувати</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="muted">Записів не знайдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ path('payment_new') }}">Додати платіж</a>
+        </div>
+    </div>
+{% endblock %}
