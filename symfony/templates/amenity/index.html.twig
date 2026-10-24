@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Зручності{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Зручності</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Назва</th>
+                    <th>Опис</th>
+                    <th>Кімнат</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for amenity in amenities %}
+                <tr>
+                    <td>{{ amenity.name }}</td>
+                    <td>{{ amenity.description ?: '—' }}</td>
+                    <td>{{ amenity.rooms|length }}</td>
+                    <td>
+                        <a href="{{ path('amenity_show', {'id': amenity.id}) }}">переглянути</a>
+                        | <a href="{{ path('amenity_edit', {'id': amenity.id}) }}">редагувати</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="muted">Записів не знайдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ path('amenity_new') }}">Додати зручність</a>
+        </div>
+    </div>
+{% endblock %}

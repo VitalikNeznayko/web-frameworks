@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Бронювання{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Бронювання</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Гість</th>
+                    <th>Ліжко</th>
+                    <th>Заїзд</th>
+                    <th>Виїзд</th>
+                    <th>Статус</th>
+                    <th>Вартість</th>
+                    <th>Дії</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.id }}</td>
+                    <td><a href="{{ path('guest_show', {'id': booking.guest.id}) }}">{{ booking.guest }}</a></td>
+                    <td><a href="{{ path('bed_show', {'id': booking.bed.id}) }}">{{ booking.bed }}</a></td>
+                    <td>{{ booking.checkIn|date('d.m.Y') }}</td>
+                    <td>{{ booking.checkOut|date('d.m.Y') }}</td>
+                    <td><span class="badge">{{ booking.statusLabel }}</span></td>
+                    <td>{{ booking.totalPrice|number_format(2, '.', ' ') }} грн</td>
+                    <td>
+                        <a href="{{ path('booking_show', {'id': booking.id}) }}">переглянути</a>
+                        | <a href="{{ path('booking_edit', {'id': booking.id}) }}">редагувати</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="8" class="muted">Записів не знайдено</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="actions">
+            <a class="btn" href="{{ path('booking_new') }}">Додати бронювання</a>
+        </div>
+    </div>
+{% endblock %}

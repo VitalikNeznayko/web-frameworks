@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Нове бронювання{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Нове бронювання</h1>
+
+        {{ include('booking/_form.html.twig', {'button_label': 'Створити'}) }}
+    </div>
+{% endblock %}

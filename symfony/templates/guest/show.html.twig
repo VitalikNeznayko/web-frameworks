@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ guest.fullName }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>{{ guest.fullName }}</h1>
+        <dl class="details">
+            <dt>Ім'я</dt><dd>{{ guest.firstName }}</dd>
+            <dt>Прізвище</dt><dd>{{ guest.lastName }}</dd>
+            <dt>Email</dt><dd>{{ guest.email }}</dd>
+            <dt>Телефон</dt><dd>{{ guest.phone }}</dd>
+            <dt>Номер паспорта</dt><dd>{{ guest.passportNumber }}</dd>
+            <dt>Країна</dt><dd>{{ guest.country }}</dd>
+            <dt>Дата народження</dt><dd>{{ guest.birthDate ? guest.birthDate|date('d.m.Y') : '—' }}</dd>
+        </dl>
+
+        <h2>Бронювання гостя</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Ліжко</th>
+                    <th>Заїзд</th>
+                    <th>Виїзд</th>
+                    <th>Статус</th>
+                    <th>Вартість</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for booking in guest.bookings %}
+                <tr>
+                    <td><a href="{{ path('booking_show', {'id': booking.id}) }}">#{{ booking.id }}</a></td>
+                    <td><a href="{{ path('bed_show', {'id': booking.bed.id}) }}">{{ booking.bed }}</a></td>
+                    <td>{{ booking.checkIn|date('d.m.Y') }}</td>
+                    <td>{{ booking.checkOut|date('d.m.Y') }}</td>
+                    <td><span class="badge">{{ booking.statusLabel }}</span></td>
+                    <td>{{ booking.totalPrice|number_format(2, '.', ' ') }} грн</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="muted">Бронювань немає</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('guest_index') }}">До списку</a>
+            <a class="btn" href="{{ path('guest_edit', {'id': guest.id}) }}">Редагувати</a>
+            <a class="btn" href="{{ path('booking_new') }}">Нове бронювання</a>
+            {{ include('guest/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

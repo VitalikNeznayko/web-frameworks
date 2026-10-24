@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ліжко {{ bed }}{% endblock %}
+
+{% block body %}
+    <div class="card">
+        <h1>Ліжко {{ bed }}</h1>
+        <dl class="details">
+            <dt>Кімната</dt><dd><a href="{{ path('room_show', {'id': bed.room.id}) }}">{{ bed.room }}</a></dd>
+            <dt>Позначка</dt><dd>{{ bed.label }}</dd>
+            <dt>Тип</dt><dd>{{ bed.bedTypeLabel }}</dd>
+            <dt>Активне</dt><dd>{{ bed.active ? 'Так' : 'Ні' }}</dd>
+        </dl>
+
+        <h2>Бронювання</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Гість</th>
+                    <th>Заїзд</th>
+                    <th>Виїзд</th>
+                    <th>Статус</th>
+                    <th>Вартість</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for booking in bed.bookings %}
+                <tr>
+                    <td><a href="{{ path('booking_show', {'id': booking.id}) }}">#{{ booking.id }}</a></td>
+                    <td><a href="{{ path('guest_show', {'id': booking.guest.id}) }}">{{ booking.guest }}</a></td>
+                    <td>{{ booking.checkIn|date('d.m.Y') }}</td>
+                    <td>{{ booking.checkOut|date('d.m.Y') }}</td>
+                    <td><span class="badge">{{ booking.statusLabel }}</span></td>
+                    <td>{{ booking.totalPrice|number_format(2, '.', ' ') }} грн</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="muted">Бронювань немає</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <a class="btn btn-secondary" href="{{ path('bed_index') }}">До списку</a>
+            <a class="btn" href="{{ path('bed_edit', {'id': bed.id}) }}">Редагувати</a>
+            {{ include('bed/_delete_form.html.twig') }}
+        </div>
+    </div>
+{% endblock %}
