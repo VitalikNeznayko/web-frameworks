@@ -1,0 +1,15 @@
+{{ form_start(filter_form) }}
+    <div class="filter-grid">
+        {% for field in filter_form %}
+            <div class="filter-field">
+                {{ form_label(field) }}
+                {{ form_widget(field) }}
+                {{ form_errors(field) }}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="filter-actions">
+        <button type="submit" class="btn">Фільтрувати</button>
+        <a class="btn btn-secondary" href="{{ path(app.request.attributes.get('_route')) }}">Скинути</a>
+    </div>
+{{ form_end(filter_form, {render_rest: false}) }}

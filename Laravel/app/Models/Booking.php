@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
+    use Filterable;
+
     public const STATUSES = [
         'pending' => 'Очікує',
         'confirmed' => 'Підтверджено',

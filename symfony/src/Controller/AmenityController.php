@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Amenity;
+use App\Form\Filter\AmenityFilterType;
 use App\Form\AmenityType;
+use App\Pagination\Paginator;
 use App\Repository\AmenityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,10 +17,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class AmenityController extends AbstractController
 {
     #[Route(name: 'amenity_index', methods: ['GET'])]
-    public function index(AmenityRepository $amenityRepository): Response
+    public function index(Request $request, AmenityRepository $amenityRepository, Paginator $paginator): Response
     {
+        $filterForm = $this->createForm(AmenityFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $pagination = $paginator->paginate(
+            $amenityRepository->createFilteredQueryBuilder($filterForm->getData() ?? []),
+            $request,
+            false,
+        );
+
         return $this->render('amenity/index.html.twig', [
-            'amenities' => $amenityRepository->findBy([], ['name' => 'ASC']),
+            'amenities' => $pagination->getItems(),
+            'pagination' => $pagination,
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

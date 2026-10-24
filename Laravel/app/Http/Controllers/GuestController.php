@@ -2,21 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\GuestFilter;
 use App\Http\Requests\GuestRequest;
 use App\Models\Guest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class GuestController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $guests = Guest::withCount('bookings')
-            ->orderBy('last_name')
-            ->orderBy('first_name')
-            ->paginate(10);
+        $filter = new GuestFilter($request->query());
 
-        return view('guests.index', compact('guests'));
+        $guests = $this->paginate(
+            Guest::filter($filter)->withCount('bookings')->orderBy('last_name')->orderBy('first_name'),
+            $request,
+        );
+
+        return view('guests.index', compact('guests', 'filter'));
     }
 
     public function create(): View

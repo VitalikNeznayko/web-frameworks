@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Payment extends Model
 {
+    use Filterable;
+
     public const METHODS = [
         'cash' => 'Готівка',
         'card' => 'Картка',

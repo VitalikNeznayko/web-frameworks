@@ -8,9 +8,11 @@
         <a href="{{ route('rooms.create') }}" class="btn">Додати кімнату</a>
     </div>
 
+    @include('partials.filters', ['filter' => $filter, 'action' => route('rooms.index')])
+
     <div class="card">
         @if ($rooms->isEmpty())
-            <p class="muted">Кімнат ще немає.</p>
+            @include('partials.empty', ['paginator' => $rooms, 'filter' => $filter, 'message' => 'Кімнат ще немає.'])
         @else
             <table>
                 <thead>
@@ -48,7 +50,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $rooms->links('pagination::default') }}
         @endif
+
+        @include('partials.pagination', ['paginator' => $rooms])
     </div>
 @endsection

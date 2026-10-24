@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Room extends Model
 {
+    use Filterable;
+
     public const TYPES = [
         'dorm' => 'Загальна',
         'private' => 'Приватна',

@@ -2,24 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\RoomFilter;
 use App\Http\Requests\RoomRequest;
 use App\Models\Amenity;
 use App\Models\Booking;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class RoomController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $rooms = Room::with('amenities')
-            ->withCount('beds')
-            ->orderBy('number')
-            ->paginate(10);
+        $filter = new RoomFilter($request->query());
 
-        return view('rooms.index', compact('rooms'));
+        $rooms = $this->paginate(
+            Room::filter($filter)->with('amenities')->withCount('beds')->orderBy('number'),
+            $request,
+        );
+
+        return view('rooms.index', compact('rooms', 'filter'));
     }
 
     public function create(): View

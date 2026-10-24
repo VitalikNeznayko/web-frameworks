@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Room;
+use App\Form\Filter\RoomFilterType;
 use App\Form\RoomType;
+use App\Pagination\Paginator;
 use App\Repository\RoomRepository;
 use Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,10 +18,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class RoomController extends AbstractController
 {
     #[Route(name: 'room_index', methods: ['GET'])]
-    public function index(RoomRepository $roomRepository): Response
+    public function index(Request $request, RoomRepository $roomRepository, Paginator $paginator): Response
     {
+        $filterForm = $this->createForm(RoomFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $pagination = $paginator->paginate(
+            $roomRepository->createFilteredQueryBuilder($filterForm->getData() ?? []),
+            $request,
+            true,
+        );
+
         return $this->render('room/index.html.twig', [
-            'rooms' => $roomRepository->findBy([], ['number' => 'ASC']),
+            'rooms' => $pagination->getItems(),
+            'pagination' => $pagination,
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

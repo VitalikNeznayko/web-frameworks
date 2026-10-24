@@ -5,9 +5,11 @@
 {% block body %}
     <div class="card">
         <h1>Гості</h1>
+        {% include '_filter_form.html.twig' %}
         <table>
             <thead>
                 <tr>
+                    <th>#</th>
                     <th>Ім'я</th>
                     <th>Email</th>
                     <th>Телефон</th>
@@ -19,6 +21,7 @@
             <tbody>
             {% for guest in guests %}
                 <tr>
+                    <td>{{ guest.id }}</td>
                     <td>{{ guest.fullName }}</td>
                     <td>{{ guest.email }}</td>
                     <td>{{ guest.phone }}</td>
@@ -31,11 +34,12 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6" class="muted">Записів не знайдено</td>
+                    <td colspan="7" class="muted">Записів не знайдено</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
+        {% include '_pagination.html.twig' %}
         <div class="actions">
             <a class="btn" href="{{ path('guest_new') }}">Додати гостя</a>
         </div>

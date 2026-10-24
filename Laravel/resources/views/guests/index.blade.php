@@ -8,9 +8,11 @@
         <a href="{{ route('guests.create') }}" class="btn">Додати гостя</a>
     </div>
 
+    @include('partials.filters', ['filter' => $filter, 'action' => route('guests.index')])
+
     <div class="card">
         @if ($guests->isEmpty())
-            <p class="muted">Гостей ще немає.</p>
+            @include('partials.empty', ['paginator' => $guests, 'filter' => $filter, 'message' => 'Гостей ще немає.'])
         @else
             <table>
                 <thead>
@@ -40,7 +42,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $guests->links('pagination::default') }}
         @endif
+
+        @include('partials.pagination', ['paginator' => $guests])
     </div>
 @endsection

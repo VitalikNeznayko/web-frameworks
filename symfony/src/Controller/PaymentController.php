@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Payment;
+use App\Form\Filter\PaymentFilterType;
 use App\Form\PaymentType;
+use App\Pagination\Paginator;
 use App\Repository\PaymentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,10 +17,21 @@ use Symfony\Component\Routing\Attribute\Route;
 final class PaymentController extends AbstractController
 {
     #[Route(name: 'payment_index', methods: ['GET'])]
-    public function index(PaymentRepository $paymentRepository): Response
+    public function index(Request $request, PaymentRepository $paymentRepository, Paginator $paginator): Response
     {
+        $filterForm = $this->createForm(PaymentFilterType::class);
+        $filterForm->handleRequest($request);
+
+        $pagination = $paginator->paginate(
+            $paymentRepository->createFilteredQueryBuilder($filterForm->getData() ?? []),
+            $request,
+            false,
+        );
+
         return $this->render('payment/index.html.twig', [
-            'payments' => $paymentRepository->findBy([], ['id' => 'DESC']),
+            'payments' => $pagination->getItems(),
+            'pagination' => $pagination,
+            'filter_form' => $filterForm->createView(),
         ]);
     }
 

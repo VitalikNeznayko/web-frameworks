@@ -5,6 +5,7 @@
 {% block body %}
     <div class="card">
         <h1>Платежі</h1>
+        {% include '_filter_form.html.twig' %}
         <table>
             <thead>
                 <tr>
@@ -38,6 +39,7 @@
             {% endfor %}
             </tbody>
         </table>
+        {% include '_pagination.html.twig' %}
         <div class="actions">
             <a class="btn" href="{{ path('payment_new') }}">Додати платіж</a>
         </div>

@@ -8,9 +8,11 @@
         <a href="{{ route('payments.create') }}" class="btn">Додати платіж</a>
     </div>
 
+    @include('partials.filters', ['filter' => $filter, 'action' => route('payments.index')])
+
     <div class="card">
         @if ($payments->isEmpty())
-            <p class="muted">Платежів ще немає.</p>
+            @include('partials.empty', ['paginator' => $payments, 'filter' => $filter, 'message' => 'Платежів ще немає.'])
         @else
             <table>
                 <thead>
@@ -44,7 +46,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $payments->links('pagination::default') }}
         @endif
+
+        @include('partials.pagination', ['paginator' => $payments])
     </div>
 @endsection

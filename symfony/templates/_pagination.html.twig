@@ -1,0 +1,44 @@
+{% set route = app.request.attributes.get('_route') %}
+{% set query = app.request.query.all|filter(v => v is not same as(''))|merge({itemsPerPage: pagination.itemsPerPage}) %}
+<div class="pagination">
+    <div class="pagination-info">
+        Показано {{ pagination.firstItem }}–{{ pagination.lastItem }} з {{ pagination.totalItems }}
+    </div>
+    {% if pagination.totalPages > 1 %}
+        <nav class="pagination-pages">
+            {% if pagination.hasPreviousPage %}
+                <a class="page-link" href="{{ path(route, query|merge({page: pagination.page - 1})) }}">&laquo; Попередня</a>
+            {% else %}
+                <span class="page-link disabled">&laquo; Попередня</span>
+            {% endif %}
+            {% for p in pagination.pageRange %}
+                {% if p is null %}
+                    <span class="page-gap">…</span>
+                {% elseif p == pagination.page %}
+                    <span class="page-link current">{{ p }}</span>
+                {% else %}
+                    <a class="page-link" href="{{ path(route, query|merge({page: p})) }}">{{ p }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if pagination.hasNextPage %}
+                <a class="page-link" href="{{ path(route, query|merge({page: pagination.page + 1})) }}">Наступна &raquo;</a>
+            {% else %}
+                <span class="page-link disabled">Наступна &raquo;</span>
+            {% endif %}
+        </nav>
+    {% endif %}
+    <form method="get" action="{{ path(route) }}" class="pagination-size">
+        {% for key, value in app.request.query.all %}
+            {% if key not in ['page', 'itemsPerPage'] and value is not iterable and value is not same as('') %}
+                <input type="hidden" name="{{ key }}" value="{{ value }}">
+            {% endif %}
+        {% endfor %}
+        <label for="itemsPerPage">На сторінці:</label>
+        <select id="itemsPerPage" name="itemsPerPage" onchange="this.form.submit()">
+            {% for size in pagination.itemsPerPageChoices %}
+                <option value="{{ size }}" {{ size == pagination.itemsPerPage ? 'selected' }}>{{ size }}</option>
+            {% endfor %}
+        </select>
+        <noscript><button type="submit" class="btn btn-secondary">OK</button></noscript>
+    </form>
+</div>

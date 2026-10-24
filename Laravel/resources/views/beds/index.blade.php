@@ -8,9 +8,11 @@
         <a href="{{ route('beds.create') }}" class="btn">Додати ліжко</a>
     </div>
 
+    @include('partials.filters', ['filter' => $filter, 'action' => route('beds.index')])
+
     <div class="card">
         @if ($beds->isEmpty())
-            <p class="muted">Ліжок ще немає.</p>
+            @include('partials.empty', ['paginator' => $beds, 'filter' => $filter, 'message' => 'Ліжок ще немає.'])
         @else
             <table>
                 <thead>
@@ -46,7 +48,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $beds->links('pagination::default') }}
         @endif
+
+        @include('partials.pagination', ['paginator' => $beds])
     </div>
 @endsection
