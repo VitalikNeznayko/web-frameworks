@@ -5,7 +5,9 @@
 @section('content')
     <div class="toolbar">
         <h1>Бронювання</h1>
-        <a href="{{ route('bookings.create') }}" class="btn">Нове бронювання</a>
+        @can('create', App\Models\Booking::class)
+            <a href="{{ route('bookings.create') }}" class="btn">Нове бронювання</a>
+        @endcan
     </div>
 
     @include('partials.filters', ['filter' => $filter, 'action' => route('bookings.index')])
@@ -41,8 +43,12 @@
                         <td>{{ number_format((float) $booking->payments_sum_amount, 2, '.', ' ') }} грн</td>
                         <td class="actions">
                             <a href="{{ route('bookings.show', $booking) }}" class="btn btn-secondary btn-sm">Переглянути</a>
-                            <a href="{{ route('bookings.edit', $booking) }}" class="btn btn-secondary btn-sm">Редагувати</a>
-                            @include('partials.delete', ['action' => route('bookings.destroy', $booking), 'confirm' => 'Видалити бронювання разом із платежами?'])
+                            @can('update', $booking)
+                                <a href="{{ route('bookings.edit', $booking) }}" class="btn btn-secondary btn-sm">Редагувати</a>
+                            @endcan
+                            @can('delete', $booking)
+                                @include('partials.delete', ['action' => route('bookings.destroy', $booking), 'confirm' => 'Видалити бронювання разом із платежами?'])
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

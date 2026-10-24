@@ -6,8 +6,12 @@
     <div class="toolbar">
         <h1>Платіж #{{ $payment->id }}</h1>
         <div class="actions">
-            <a href="{{ route('payments.edit', $payment) }}" class="btn">Редагувати</a>
-            @include('partials.delete', ['action' => route('payments.destroy', $payment), 'confirm' => 'Видалити платіж?', 'size' => ''])
+            @can('update', $payment)
+                <a href="{{ route('payments.edit', $payment) }}" class="btn">Редагувати</a>
+            @endcan
+            @can('delete', $payment)
+                @include('partials.delete', ['action' => route('payments.destroy', $payment), 'confirm' => 'Видалити платіж?', 'size' => ''])
+            @endcan
             <a href="{{ route('payments.index') }}" class="btn btn-secondary">До списку</a>
         </div>
     </div>

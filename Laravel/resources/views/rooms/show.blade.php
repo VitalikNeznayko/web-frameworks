@@ -6,8 +6,12 @@
     <div class="toolbar">
         <h1>Кімната {{ $room->number }}</h1>
         <div class="actions">
-            <a href="{{ route('rooms.edit', $room) }}" class="btn">Редагувати</a>
-            @include('partials.delete', ['action' => route('rooms.destroy', $room), 'confirm' => 'Видалити кімнату?', 'size' => ''])
+            @can('update', $room)
+                <a href="{{ route('rooms.edit', $room) }}" class="btn">Редагувати</a>
+            @endcan
+            @can('delete', $room)
+                @include('partials.delete', ['action' => route('rooms.destroy', $room), 'confirm' => 'Видалити кімнату?', 'size' => ''])
+            @endcan
             <a href="{{ route('rooms.index') }}" class="btn btn-secondary">До списку</a>
         </div>
     </div>
@@ -35,7 +39,9 @@
 
     <div class="toolbar">
         <h2>Ліжка ({{ $room->beds->count() }})</h2>
-        <a href="{{ route('beds.create') }}" class="btn btn-secondary btn-sm">Додати ліжко</a>
+        @can('create', App\Models\Bed::class)
+            <a href="{{ route('beds.create') }}" class="btn btn-secondary btn-sm">Додати ліжко</a>
+        @endcan
     </div>
     <div class="card">
         @if ($room->beds->isEmpty())

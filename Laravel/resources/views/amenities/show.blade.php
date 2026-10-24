@@ -6,8 +6,12 @@
     <div class="toolbar">
         <h1>{{ $amenity->name }}</h1>
         <div class="actions">
-            <a href="{{ route('amenities.edit', $amenity) }}" class="btn">Редагувати</a>
-            @include('partials.delete', ['action' => route('amenities.destroy', $amenity), 'confirm' => 'Видалити зручність?', 'size' => ''])
+            @can('update', $amenity)
+                <a href="{{ route('amenities.edit', $amenity) }}" class="btn">Редагувати</a>
+            @endcan
+            @can('delete', $amenity)
+                @include('partials.delete', ['action' => route('amenities.destroy', $amenity), 'confirm' => 'Видалити зручність?', 'size' => ''])
+            @endcan
             <a href="{{ route('amenities.index') }}" class="btn btn-secondary">До списку</a>
         </div>
     </div>

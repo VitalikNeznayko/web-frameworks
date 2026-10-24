@@ -9,10 +9,16 @@ use App\Models\Payment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\View\View;
 
-class PaymentController extends Controller
+class PaymentController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return self::resourceAuthorization(Payment::class, 'payment');
+    }
+
     public function index(Request $request): View
     {
         $filter = new PaymentFilter($request->query());

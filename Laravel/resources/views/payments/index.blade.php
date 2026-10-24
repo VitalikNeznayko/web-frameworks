@@ -5,7 +5,9 @@
 @section('content')
     <div class="toolbar">
         <h1>Платежі</h1>
-        <a href="{{ route('payments.create') }}" class="btn">Додати платіж</a>
+        @can('create', App\Models\Payment::class)
+            <a href="{{ route('payments.create') }}" class="btn">Додати платіж</a>
+        @endcan
     </div>
 
     @include('partials.filters', ['filter' => $filter, 'action' => route('payments.index')])
@@ -39,8 +41,12 @@
                         <td>{{ $payment->paid_at?->format('d.m.Y H:i') ?? '—' }}</td>
                         <td class="actions">
                             <a href="{{ route('payments.show', $payment) }}" class="btn btn-secondary btn-sm">Переглянути</a>
-                            <a href="{{ route('payments.edit', $payment) }}" class="btn btn-secondary btn-sm">Редагувати</a>
-                            @include('partials.delete', ['action' => route('payments.destroy', $payment), 'confirm' => 'Видалити платіж?'])
+                            @can('update', $payment)
+                                <a href="{{ route('payments.edit', $payment) }}" class="btn btn-secondary btn-sm">Редагувати</a>
+                            @endcan
+                            @can('delete', $payment)
+                                @include('partials.delete', ['action' => route('payments.destroy', $payment), 'confirm' => 'Видалити платіж?'])
+                            @endcan
                         </td>
                     </tr>
                 @endforeach

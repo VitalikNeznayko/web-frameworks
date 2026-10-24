@@ -39,7 +39,7 @@
         .field { display: flex; flex-direction: column; gap: 6px; }
         .field.full { grid-column: 1 / -1; }
         label { font-weight: 600; font-size: 14px; }
-        input[type=text], input[type=email], input[type=number], input[type=date], input[type=datetime-local], select, textarea { padding: 8px 10px; border: 1px solid #c3cbd5; border-radius: 5px; font: inherit; width: 100%; background: #fff; }
+        input[type=text], input[type=email], input[type=password], input[type=number], input[type=date], input[type=datetime-local], select, textarea { padding: 8px 10px; border: 1px solid #c3cbd5; border-radius: 5px; font: inherit; width: 100%; background: #fff; }
         textarea { min-height: 90px; resize: vertical; }
         .is-invalid { border-color: #c0392b !important; }
         .error-text { color: #c0392b; font-size: 13px; }
@@ -77,6 +77,19 @@
         .per-page { display: flex; align-items: center; gap: 8px; margin: 0; }
         .per-page label { font-weight: 400; color: #52606d; white-space: nowrap; }
         .per-page select { width: auto; padding: 5px 8px; }
+        .user-box { display: flex; align-items: center; gap: 10px; }
+        .user-box .user-name { color: #fff; font-weight: 600; }
+        .role-badge { margin: 0; font-weight: 600; }
+        .role-admin { background: #f8d7d3; color: #922b21; }
+        .role-manager { background: #fdebc8; color: #8a5a00; }
+        .role-client { background: #d4f0dc; color: #1e6b34; }
+        .auth-card { max-width: 440px; margin: 40px auto; }
+        .auth-card h1 { text-align: center; }
+        .auth-card .form-grid { grid-template-columns: 1fr; }
+        .auth-card .form-actions { justify-content: space-between; align-items: center; }
+        .error-page { text-align: center; padding: 40px 20px; }
+        .error-page .form-actions { justify-content: center; }
+        .error-page .code { font-size: 64px; font-weight: 700; color: #c0392b; margin: 0; }
         @media (max-width: 640px) { dl.details { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -84,14 +97,44 @@
 <header>
     <div class="bar">
         <a href="{{ route('home') }}" class="brand">Хостел</a>
-        <nav>
-            <a href="{{ route('rooms.index') }}" class="{{ request()->routeIs('rooms.*') ? 'active' : '' }}">Кімнати</a>
-            <a href="{{ route('amenities.index') }}" class="{{ request()->routeIs('amenities.*') ? 'active' : '' }}">Зручності</a>
-            <a href="{{ route('beds.index') }}" class="{{ request()->routeIs('beds.*') ? 'active' : '' }}">Ліжка</a>
-            <a href="{{ route('guests.index') }}" class="{{ request()->routeIs('guests.*') ? 'active' : '' }}">Гості</a>
-            <a href="{{ route('bookings.index') }}" class="{{ request()->routeIs('bookings.*') ? 'active' : '' }}">Бронювання</a>
-            <a href="{{ route('payments.index') }}" class="{{ request()->routeIs('payments.*') ? 'active' : '' }}">Платежі</a>
-        </nav>
+        @auth
+            <nav>
+                @can('viewAny', App\Models\Room::class)
+                    <a href="{{ route('rooms.index') }}" class="{{ request()->routeIs('rooms.*') ? 'active' : '' }}">Кімнати</a>
+                @endcan
+                @can('viewAny', App\Models\Amenity::class)
+                    <a href="{{ route('amenities.index') }}" class="{{ request()->routeIs('amenities.*') ? 'active' : '' }}">Зручності</a>
+                @endcan
+                @can('viewAny', App\Models\Bed::class)
+                    <a href="{{ route('beds.index') }}" class="{{ request()->routeIs('beds.*') ? 'active' : '' }}">Ліжка</a>
+                @endcan
+                @can('viewAny', App\Models\Guest::class)
+                    <a href="{{ route('guests.index') }}" class="{{ request()->routeIs('guests.*') ? 'active' : '' }}">Гості</a>
+                @endcan
+                @can('viewAny', App\Models\Booking::class)
+                    <a href="{{ route('bookings.index') }}" class="{{ request()->routeIs('bookings.*') ? 'active' : '' }}">Бронювання</a>
+                @endcan
+                @can('viewAny', App\Models\Payment::class)
+                    <a href="{{ route('payments.index') }}" class="{{ request()->routeIs('payments.*') ? 'active' : '' }}">Платежі</a>
+                @endcan
+                @can('viewAny', App\Models\User::class)
+                    <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">Користувачі</a>
+                @endcan
+            </nav>
+            <div class="user-box">
+                <span class="user-name">{{ auth()->user()->name }}</span>
+                <span class="badge role-badge role-{{ auth()->user()->role }}">{{ auth()->user()->roleLabel() }}</span>
+                <form action="{{ route('logout') }}" method="POST" class="inline">
+                    @csrf
+                    <button type="submit" class="btn btn-secondary btn-sm">Вийти</button>
+                </form>
+            </div>
+        @else
+            <nav>
+                <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Вхід</a>
+                <a href="{{ route('register') }}" class="{{ request()->routeIs('register') ? 'active' : '' }}">Реєстрація</a>
+            </nav>
+        @endauth
     </div>
 </header>
 <main>

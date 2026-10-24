@@ -9,11 +9,17 @@ use App\Models\Booking;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
-class RoomController extends Controller
+class RoomController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return self::resourceAuthorization(Room::class, 'room');
+    }
+
     public function index(Request $request): View
     {
         $filter = new RoomFilter($request->query());

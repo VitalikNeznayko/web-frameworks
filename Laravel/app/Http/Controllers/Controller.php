@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\Middleware;
 
 abstract class Controller
 {
@@ -19,6 +20,17 @@ abstract class Controller
         return is_string($value) && in_array($value, array_map('strval', self::PER_PAGE_OPTIONS), true)
             ? (int) $value
             : self::DEFAULT_PER_PAGE;
+    }
+
+    protected static function resourceAuthorization(string $model, string $parameter): array
+    {
+        return [
+            new Middleware("can:viewAny,{$model}", only: ['index']),
+            new Middleware("can:view,{$parameter}", only: ['show']),
+            new Middleware("can:create,{$model}", only: ['create', 'store']),
+            new Middleware("can:update,{$parameter}", only: ['edit', 'update']),
+            new Middleware("can:delete,{$parameter}", only: ['destroy']),
+        ];
     }
 
     protected function paginate(Builder $query, Request $request): LengthAwarePaginator

@@ -6,8 +6,12 @@
     <div class="toolbar">
         <h1>{{ $guest->full_name }}</h1>
         <div class="actions">
-            <a href="{{ route('guests.edit', $guest) }}" class="btn">Редагувати</a>
-            @include('partials.delete', ['action' => route('guests.destroy', $guest), 'confirm' => 'Видалити гостя?', 'size' => ''])
+            @can('update', $guest)
+                <a href="{{ route('guests.edit', $guest) }}" class="btn">Редагувати</a>
+            @endcan
+            @can('delete', $guest)
+                @include('partials.delete', ['action' => route('guests.destroy', $guest), 'confirm' => 'Видалити гостя?', 'size' => ''])
+            @endcan
             <a href="{{ route('guests.index') }}" class="btn btn-secondary">До списку</a>
         </div>
     </div>
@@ -29,7 +33,9 @@
 
     <div class="toolbar">
         <h2>Бронювання ({{ $guest->bookings->count() }})</h2>
-        <a href="{{ route('bookings.create') }}" class="btn btn-secondary btn-sm">Нове бронювання</a>
+        @can('create', App\Models\Booking::class)
+            <a href="{{ route('bookings.create') }}" class="btn btn-secondary btn-sm">Нове бронювання</a>
+        @endcan
     </div>
     <div class="card">
         @if ($guest->bookings->isEmpty())

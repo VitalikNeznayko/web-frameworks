@@ -7,10 +7,16 @@ use App\Http\Requests\AmenityRequest;
 use App\Models\Amenity;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\View\View;
 
-class AmenityController extends Controller
+class AmenityController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return self::resourceAuthorization(Amenity::class, 'amenity');
+    }
+
     public function index(Request $request): View
     {
         $filter = new AmenityFilter($request->query());

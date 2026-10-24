@@ -7,10 +7,16 @@ use App\Http\Requests\GuestRequest;
 use App\Models\Guest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\View\View;
 
-class GuestController extends Controller
+class GuestController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return self::resourceAuthorization(Guest::class, 'guest');
+    }
+
     public function index(Request $request): View
     {
         $filter = new GuestFilter($request->query());
