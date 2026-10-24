@@ -2,23 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\BookingFilter;
 use App\Http\Requests\BookingRequest;
 use App\Models\Bed;
 use App\Models\Booking;
 use App\Models\Guest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BookingController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $bookings = Booking::with(['guest', 'bed.room'])
-            ->withSum('payments', 'amount')
-            ->orderByDesc('check_in')
-            ->paginate(10);
+        $filter = new BookingFilter($request->query());
 
-        return view('bookings.index', compact('bookings'));
+        $bookings = $this->paginate(
+            Booking::filter($filter)->with(['guest', 'bed.room'])->withSum('payments', 'amount')->orderByDesc('check_in'),
+            $request,
+        );
+
+        return view('bookings.index', compact('bookings', 'filter'));
     }
 
     public function create(): View

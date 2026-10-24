@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\AmenityFilter;
 use App\Http\Requests\AmenityRequest;
 use App\Models\Amenity;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class AmenityController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $amenities = Amenity::withCount('rooms')->orderBy('name')->paginate(10);
+        $filter = new AmenityFilter($request->query());
 
-        return view('amenities.index', compact('amenities'));
+        $amenities = $this->paginate(
+            Amenity::filter($filter)->withCount('rooms')->orderBy('name'),
+            $request,
+        );
+
+        return view('amenities.index', compact('amenities', 'filter'));
     }
 
     public function create(): View

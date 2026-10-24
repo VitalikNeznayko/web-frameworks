@@ -8,9 +8,11 @@
         <a href="{{ route('bookings.create') }}" class="btn">Нове бронювання</a>
     </div>
 
+    @include('partials.filters', ['filter' => $filter, 'action' => route('bookings.index')])
+
     <div class="card">
         @if ($bookings->isEmpty())
-            <p class="muted">Бронювань ще немає.</p>
+            @include('partials.empty', ['paginator' => $bookings, 'filter' => $filter, 'message' => 'Бронювань ще немає.'])
         @else
             <table>
                 <thead>
@@ -46,7 +48,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $bookings->links('pagination::default') }}
         @endif
+
+        @include('partials.pagination', ['paginator' => $bookings])
     </div>
 @endsection

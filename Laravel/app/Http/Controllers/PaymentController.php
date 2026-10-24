@@ -2,22 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\PaymentFilter;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Booking;
 use App\Models\Payment;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $payments = Payment::with('booking.guest')
-            ->orderByDesc('created_at')
-            ->paginate(10);
+        $filter = new PaymentFilter($request->query());
 
-        return view('payments.index', compact('payments'));
+        $payments = $this->paginate(
+            Payment::filter($filter)->with('booking.guest')->orderByDesc('created_at'),
+            $request,
+        );
+
+        return view('payments.index', compact('payments', 'filter'));
     }
 
     public function create(): View

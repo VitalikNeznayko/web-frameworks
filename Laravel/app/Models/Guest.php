@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Filterable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Guest extends Model
 {
+    use Filterable;
+
     protected $fillable = [
         'first_name',
         'last_name',

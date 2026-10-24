@@ -62,6 +62,21 @@
         .pagination li a, .pagination li span { display: block; padding: 6px 11px; border: 1px solid #c3cbd5; border-radius: 4px; background: #fff; color: #2f6fb3; text-decoration: none; font-size: 14px; }
         .pagination li.active span { background: #2f6fb3; color: #fff; border-color: #2f6fb3; }
         .pagination li.disabled span { color: #9aa5b1; }
+        .filters { padding: 16px; }
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px 14px; }
+        .filter-grid .field { gap: 4px; }
+        .filter-grid label { font-size: 13px; color: #52606d; }
+        .filter-grid input, .filter-grid select { padding: 6px 8px; font-size: 14px; }
+        .filter-grid .range { display: flex; flex-wrap: wrap; gap: 6px; }
+        .filter-grid .range input { flex: 1 1 100px; min-width: 0; }
+        .filter-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+        .filters .error-text { margin: 12px 0 0; }
+        .pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; }
+        .pager .pagination { margin: 0; }
+        .pager-info { color: #52606d; font-size: 14px; }
+        .per-page { display: flex; align-items: center; gap: 8px; margin: 0; }
+        .per-page label { font-weight: 400; color: #52606d; white-space: nowrap; }
+        .per-page select { width: auto; padding: 5px 8px; }
         @media (max-width: 640px) { dl.details { grid-template-columns: 1fr; } }
     </style>
 </head>

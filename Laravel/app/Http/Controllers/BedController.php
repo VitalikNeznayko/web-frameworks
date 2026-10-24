@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\BedFilter;
 use App\Http\Requests\BedRequest;
 use App\Models\Bed;
 use App\Models\Room;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class BedController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $beds = Bed::with('room')
-            ->withCount('bookings')
-            ->orderBy('room_id')
-            ->orderBy('label')
-            ->paginate(10);
+        $filter = new BedFilter($request->query());
 
-        return view('beds.index', compact('beds'));
+        $beds = $this->paginate(
+            Bed::filter($filter)->with('room')->withCount('bookings')->orderBy('room_id')->orderBy('label'),
+            $request,
+        );
+
+        return view('beds.index', compact('beds', 'filter'));
     }
 
     public function create(): View

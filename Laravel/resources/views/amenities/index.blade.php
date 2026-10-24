@@ -8,9 +8,11 @@
         <a href="{{ route('amenities.create') }}" class="btn">Додати зручність</a>
     </div>
 
+    @include('partials.filters', ['filter' => $filter, 'action' => route('amenities.index')])
+
     <div class="card">
         @if ($amenities->isEmpty())
-            <p class="muted">Зручностей ще немає.</p>
+            @include('partials.empty', ['paginator' => $amenities, 'filter' => $filter, 'message' => 'Зручностей ще немає.'])
         @else
             <table>
                 <thead>
@@ -36,7 +38,8 @@
                 @endforeach
                 </tbody>
             </table>
-            {{ $amenities->links('pagination::default') }}
         @endif
+
+        @include('partials.pagination', ['paginator' => $amenities])
     </div>
 @endsection
