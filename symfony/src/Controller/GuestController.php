@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Guest;
+use App\Entity\User;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 final class GuestController extends AbstractController
@@ -35,6 +37,7 @@ final class GuestController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/guests', name: 'app_get_guests', methods: ['GET'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function getGuests(Request $request): JsonResponse
     {
         $queryParams = $request->query->all();
@@ -49,6 +52,7 @@ final class GuestController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/guests/{id}', name: 'app_get_guest_by_id', methods: ['GET'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function getGuestById(string $id): JsonResponse
     {
         /** @var Guest $guest */
@@ -66,6 +70,7 @@ final class GuestController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/guests', name: 'app_create_guest', methods: ['POST'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function createGuest(Request $request): JsonResponse
     {
         $guestData = json_decode($request->getContent(), true) ?? [];
@@ -105,6 +110,7 @@ final class GuestController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/guests/{id}', name: 'app_update_guest_by_id', methods: ['PATCH'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function updateGuestById(string $id, Request $request): JsonResponse
     {
         /** @var Guest $guest */
@@ -154,6 +160,7 @@ final class GuestController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/guests/{id}', name: 'app_delete_guest_by_id', methods: ['DELETE'])]
+    #[IsGranted(User::ROLE_ADMIN)]
     public function deleteGuestById(string $id): JsonResponse
     {
         /** @var Guest $guest */

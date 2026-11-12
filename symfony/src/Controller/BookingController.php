@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Bed;
 use App\Entity\Booking;
 use App\Entity\Guest;
+use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 final class BookingController extends AbstractController
@@ -37,6 +39,7 @@ final class BookingController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/bookings', name: 'app_get_bookings', methods: ['GET'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function getBookings(Request $request): JsonResponse
     {
         $queryParams = $request->query->all();
@@ -51,6 +54,7 @@ final class BookingController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/bookings/{id}', name: 'app_get_booking_by_id', methods: ['GET'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function getBookingById(string $id): JsonResponse
     {
         /** @var Booking $booking */
@@ -68,6 +72,7 @@ final class BookingController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/bookings', name: 'app_create_booking', methods: ['POST'])]
+    #[IsGranted(User::ROLE_CLIENT)]
     public function createBooking(Request $request): JsonResponse
     {
         $bookingData = json_decode($request->getContent(), true) ?? [];
@@ -124,6 +129,7 @@ final class BookingController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/bookings/{id}', name: 'app_update_booking_by_id', methods: ['PATCH'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function updateBookingById(string $id, Request $request): JsonResponse
     {
         /** @var Booking $booking */
@@ -195,6 +201,7 @@ final class BookingController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/bookings/{id}', name: 'app_delete_booking_by_id', methods: ['DELETE'])]
+    #[IsGranted(User::ROLE_ADMIN)]
     public function deleteBookingById(string $id): JsonResponse
     {
         /** @var Booking $booking */
