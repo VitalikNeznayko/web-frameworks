@@ -13,8 +13,16 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->validateCsrfTokens(except: [
-            'products',
-            'products/*',
+            'rooms',
+            'rooms/*',
+            'beds',
+            'beds/*',
+            'guests',
+            'guests/*',
+            'bookings',
+            'bookings/*',
+            'payments',
+            'payments/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
