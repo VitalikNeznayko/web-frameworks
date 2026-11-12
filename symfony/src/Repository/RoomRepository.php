@@ -3,14 +3,22 @@
 namespace App\Repository;
 
 use App\Entity\Room;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Room>
+ * @extends AbstractFilterRepository<Room>
  */
-class RoomRepository extends ServiceEntityRepository
+class RoomRepository extends AbstractFilterRepository
 {
+
+    public const FIELDS = [
+        'id'              => ['id', 'EQUAL'],
+        'number'          => ['number', 'LIKE'],
+        'type'            => ['type', 'LIKE'],
+        'floor'           => ['floor', 'BETWEEN'],
+        'price_per_night' => ['pricePerNight', 'BETWEEN'],
+        'description'     => ['description', 'LIKE']
+    ];
 
     /**
      * @param ManagerRegistry $registry

@@ -3,14 +3,21 @@
 namespace App\Repository;
 
 use App\Entity\Bed;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Bed>
+ * @extends AbstractFilterRepository<Bed>
  */
-class BedRepository extends ServiceEntityRepository
+class BedRepository extends AbstractFilterRepository
 {
+
+    public const FIELDS = [
+        'id'        => ['id', 'EQUAL'],
+        'room_id'   => ['room', 'EQUAL'],
+        'label'     => ['label', 'LIKE'],
+        'bed_type'  => ['bedType', 'LIKE'],
+        'is_active' => ['isActive', 'BOOL']
+    ];
 
     /**
      * @param ManagerRegistry $registry

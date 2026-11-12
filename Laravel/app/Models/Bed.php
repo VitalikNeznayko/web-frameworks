@@ -2,12 +2,23 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Bed extends Model
 {
+
+    use Filterable;
+
+    public const FILTER_FIELDS = [
+        "id"        => "EQUAL",
+        "room_id"   => "EQUAL",
+        "label"     => "LIKE",
+        "bed_type"  => "LIKE",
+        "is_active" => "BOOL"
+    ];
 
     /**
      * @var string[]

@@ -3,14 +3,23 @@
 namespace App\Repository;
 
 use App\Entity\Guest;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Guest>
+ * @extends AbstractFilterRepository<Guest>
  */
-class GuestRepository extends ServiceEntityRepository
+class GuestRepository extends AbstractFilterRepository
 {
+
+    public const FIELDS = [
+        'id'              => ['id', 'EQUAL'],
+        'first_name'      => ['firstName', 'LIKE'],
+        'last_name'       => ['lastName', 'LIKE'],
+        'email'           => ['email', 'LIKE'],
+        'phone'           => ['phone', 'LIKE'],
+        'passport_number' => ['passportNumber', 'LIKE'],
+        'country'         => ['country', 'LIKE']
+    ];
 
     /**
      * @param ManagerRegistry $registry

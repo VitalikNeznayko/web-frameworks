@@ -31,12 +31,15 @@ final class BedController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     #[Route('/beds', name: 'app_get_beds', methods: ['GET'])]
-    public function getBeds(): JsonResponse
+    public function getBeds(Request $request): JsonResponse
     {
-        $beds = $this->entityManager->getRepository(Bed::class)->findAll();
+        $queryParams = $request->query->all();
+
+        $beds = $this->entityManager->getRepository(Bed::class)->getFilteredItems($queryParams);
 
         return $this->json($beds, Response::HTTP_OK);
     }

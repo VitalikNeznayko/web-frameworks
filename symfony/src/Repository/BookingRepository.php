@@ -3,14 +3,23 @@
 namespace App\Repository;
 
 use App\Entity\Booking;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Booking>
+ * @extends AbstractFilterRepository<Booking>
  */
-class BookingRepository extends ServiceEntityRepository
+class BookingRepository extends AbstractFilterRepository
 {
+
+    public const FIELDS = [
+        'id'          => ['id', 'EQUAL'],
+        'guest_id'    => ['guest', 'EQUAL'],
+        'bed_id'      => ['bed', 'EQUAL'],
+        'check_in'    => ['checkIn', 'BETWEEN'],
+        'check_out'   => ['checkOut', 'BETWEEN'],
+        'status'      => ['status', 'LIKE'],
+        'total_price' => ['totalPrice', 'BETWEEN']
+    ];
 
     /**
      * @param ManagerRegistry $registry

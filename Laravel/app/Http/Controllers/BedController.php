@@ -15,11 +15,14 @@ class BedController extends Controller
     public const REQUIRED_FIELDS = ['room_id', 'label', 'bed_type'];
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getBeds(): JsonResponse
+    public function getBeds(Request $request): JsonResponse
     {
-        $beds = Bed::all();
+        $queryParams = $request->query();
+
+        $beds = Bed::getFilteredItems($queryParams);
 
         return response()->json($beds, Response::HTTP_OK);
     }

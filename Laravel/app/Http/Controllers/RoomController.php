@@ -15,11 +15,14 @@ class RoomController extends Controller
     public const REQUIRED_FIELDS = ['number', 'type', 'floor', 'price_per_night'];
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getRooms(): JsonResponse
+    public function getRooms(Request $request): JsonResponse
     {
-        $rooms = Room::all();
+        $queryParams = $request->query();
+
+        $rooms = Room::getFilteredItems($queryParams);
 
         return response()->json($rooms, Response::HTTP_OK);
     }

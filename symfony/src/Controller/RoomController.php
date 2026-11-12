@@ -31,12 +31,15 @@ final class RoomController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     #[Route('/rooms', name: 'app_get_rooms', methods: ['GET'])]
-    public function getRooms(): JsonResponse
+    public function getRooms(Request $request): JsonResponse
     {
-        $rooms = $this->entityManager->getRepository(Room::class)->findAll();
+        $queryParams = $request->query->all();
+
+        $rooms = $this->entityManager->getRepository(Room::class)->getFilteredItems($queryParams);
 
         return $this->json($rooms, Response::HTTP_OK);
     }

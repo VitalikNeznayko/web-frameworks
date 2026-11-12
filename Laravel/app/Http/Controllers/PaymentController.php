@@ -16,11 +16,14 @@ class PaymentController extends Controller
     public const REQUIRED_FIELDS = ['booking_id', 'amount', 'method'];
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getPayments(): JsonResponse
+    public function getPayments(Request $request): JsonResponse
     {
-        $payments = Payment::all();
+        $queryParams = $request->query();
+
+        $payments = Payment::getFilteredItems($queryParams);
 
         return response()->json($payments, Response::HTTP_OK);
     }

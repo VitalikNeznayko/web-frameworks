@@ -31,12 +31,15 @@ final class GuestController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     #[Route('/guests', name: 'app_get_guests', methods: ['GET'])]
-    public function getGuests(): JsonResponse
+    public function getGuests(Request $request): JsonResponse
     {
-        $guests = $this->entityManager->getRepository(Guest::class)->findAll();
+        $queryParams = $request->query->all();
+
+        $guests = $this->entityManager->getRepository(Guest::class)->getFilteredItems($queryParams);
 
         return $this->json($guests, Response::HTTP_OK);
     }

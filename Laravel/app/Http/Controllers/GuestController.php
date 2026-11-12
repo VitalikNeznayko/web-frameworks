@@ -15,11 +15,14 @@ class GuestController extends Controller
     public const REQUIRED_FIELDS = ['first_name', 'last_name', 'email', 'phone', 'passport_number', 'country'];
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getGuests(): JsonResponse
+    public function getGuests(Request $request): JsonResponse
     {
-        $guests = Guest::all();
+        $queryParams = $request->query();
+
+        $guests = Guest::getFilteredItems($queryParams);
 
         return response()->json($guests, Response::HTTP_OK);
     }

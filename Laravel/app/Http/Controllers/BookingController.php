@@ -17,11 +17,14 @@ class BookingController extends Controller
     public const REQUIRED_FIELDS = ['guest_id', 'bed_id', 'check_in', 'check_out', 'total_price'];
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
-    public function getBookings(): JsonResponse
+    public function getBookings(Request $request): JsonResponse
     {
-        $bookings = Booking::all();
+        $queryParams = $request->query();
+
+        $bookings = Booking::getFilteredItems($queryParams);
 
         return response()->json($bookings, Response::HTTP_OK);
     }

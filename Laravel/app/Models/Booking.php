@@ -2,12 +2,25 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Filterable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Booking extends Model
 {
+
+    use Filterable;
+
+    public const FILTER_FIELDS = [
+        "id"          => "EQUAL",
+        "guest_id"    => "EQUAL",
+        "bed_id"      => "EQUAL",
+        "check_in"    => "BETWEEN",
+        "check_out"   => "BETWEEN",
+        "status"      => "LIKE",
+        "total_price" => "BETWEEN"
+    ];
 
     /**
      * @var string[]
