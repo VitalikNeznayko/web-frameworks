@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Room;
+use App\Entity\User;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -10,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 final class RoomController extends AbstractController
@@ -35,6 +37,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/rooms', name: 'app_get_rooms', methods: ['GET'])]
+    #[IsGranted(User::ROLE_CLIENT)]
     public function getRooms(Request $request): JsonResponse
     {
         $queryParams = $request->query->all();
@@ -49,6 +52,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/rooms/{id}', name: 'app_get_room_by_id', methods: ['GET'])]
+    #[IsGranted(User::ROLE_CLIENT)]
     public function getRoomById(string $id): JsonResponse
     {
         /** @var Room $room */
@@ -66,6 +70,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/rooms', name: 'app_create_room', methods: ['POST'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function createRoom(Request $request): JsonResponse
     {
         $roomData = json_decode($request->getContent(), true) ?? [];
@@ -104,6 +109,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/rooms/{id}', name: 'app_update_room_by_id', methods: ['PATCH'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function updateRoomById(string $id, Request $request): JsonResponse
     {
         /** @var Room $room */
@@ -149,6 +155,7 @@ final class RoomController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/rooms/{id}', name: 'app_delete_room_by_id', methods: ['DELETE'])]
+    #[IsGranted(User::ROLE_ADMIN)]
     public function deleteRoomById(string $id): JsonResponse
     {
         /** @var Room $room */

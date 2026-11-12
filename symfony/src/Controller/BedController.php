@@ -4,12 +4,14 @@ namespace App\Controller;
 
 use App\Entity\Bed;
 use App\Entity\Room;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 final class BedController extends AbstractController
@@ -35,6 +37,7 @@ final class BedController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/beds', name: 'app_get_beds', methods: ['GET'])]
+    #[IsGranted(User::ROLE_CLIENT)]
     public function getBeds(Request $request): JsonResponse
     {
         $queryParams = $request->query->all();
@@ -49,6 +52,7 @@ final class BedController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/beds/{id}', name: 'app_get_bed_by_id', methods: ['GET'])]
+    #[IsGranted(User::ROLE_CLIENT)]
     public function getBedById(string $id): JsonResponse
     {
         /** @var Bed $bed */
@@ -66,6 +70,7 @@ final class BedController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/beds', name: 'app_create_bed', methods: ['POST'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function createBed(Request $request): JsonResponse
     {
         $bedData = json_decode($request->getContent(), true) ?? [];
@@ -106,6 +111,7 @@ final class BedController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/beds/{id}', name: 'app_update_bed_by_id', methods: ['PATCH'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function updateBedById(string $id, Request $request): JsonResponse
     {
         /** @var Bed $bed */
@@ -150,6 +156,7 @@ final class BedController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/beds/{id}', name: 'app_delete_bed_by_id', methods: ['DELETE'])]
+    #[IsGranted(User::ROLE_ADMIN)]
     public function deleteBedById(string $id): JsonResponse
     {
         /** @var Bed $bed */

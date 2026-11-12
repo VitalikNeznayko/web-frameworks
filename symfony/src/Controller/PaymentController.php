@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Entity\Payment;
+use App\Entity\User;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/api')]
 final class PaymentController extends AbstractController
@@ -36,6 +38,7 @@ final class PaymentController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/payments', name: 'app_get_payments', methods: ['GET'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function getPayments(Request $request): JsonResponse
     {
         $queryParams = $request->query->all();
@@ -50,6 +53,7 @@ final class PaymentController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/payments/{id}', name: 'app_get_payment_by_id', methods: ['GET'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function getPaymentById(string $id): JsonResponse
     {
         /** @var Payment $payment */
@@ -67,6 +71,7 @@ final class PaymentController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/payments', name: 'app_create_payment', methods: ['POST'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function createPayment(Request $request): JsonResponse
     {
         $paymentData = json_decode($request->getContent(), true) ?? [];
@@ -118,6 +123,7 @@ final class PaymentController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/payments/{id}', name: 'app_update_payment_by_id', methods: ['PATCH'])]
+    #[IsGranted(User::ROLE_MANAGER)]
     public function updatePaymentById(string $id, Request $request): JsonResponse
     {
         /** @var Payment $payment */
@@ -172,6 +178,7 @@ final class PaymentController extends AbstractController
      * @return JsonResponse
      */
     #[Route('/payments/{id}', name: 'app_delete_payment_by_id', methods: ['DELETE'])]
+    #[IsGranted(User::ROLE_ADMIN)]
     public function deletePaymentById(string $id): JsonResponse
     {
         /** @var Payment $payment */
