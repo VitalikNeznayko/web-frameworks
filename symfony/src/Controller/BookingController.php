@@ -33,12 +33,15 @@ final class BookingController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @return JsonResponse
      */
     #[Route('/bookings', name: 'app_get_bookings', methods: ['GET'])]
-    public function getBookings(): JsonResponse
+    public function getBookings(Request $request): JsonResponse
     {
-        $bookings = $this->entityManager->getRepository(Booking::class)->findAll();
+        $queryParams = $request->query->all();
+
+        $bookings = $this->entityManager->getRepository(Booking::class)->getFilteredItems($queryParams);
 
         return $this->json($bookings, Response::HTTP_OK);
     }
