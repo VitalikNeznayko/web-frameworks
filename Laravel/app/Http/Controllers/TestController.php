@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-class TestController extends Controller{
+class TestController extends Controller
+{
 
     /**
      * @return string
      */
-    public function test() : string {
-        return "Test";
+    public function test(): string
+    {
+        return "test";
     }
+
 }

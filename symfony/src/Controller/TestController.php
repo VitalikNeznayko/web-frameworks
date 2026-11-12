@@ -2,14 +2,18 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-class TestController
+final class TestController extends AbstractController
 {
-    #[Route('/test', name: 'test')]
-    public function test(): Response
+    #[Route('/test', name: 'app_test')]
+    public function index(): JsonResponse
     {
-        return new Response('Hello Symfony!');
+        return $this->json([
+            'message' => 'Welcome to your new controller!',
+            'path' => 'src/Controller/TestController.php',
+        ]);
     }
 }
